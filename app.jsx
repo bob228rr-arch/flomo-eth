@@ -9,7 +9,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "marqueeSpeed": 60,
   "showEditorialExtras": true,
   "ca": "0x00000000000000000000000000000000FL0MO",
-  "twitterUrl": "https://twitter.com",
+  "twitterUrl": "https://x.com/flomo_fomo",
   "dexUrl": "https://dexscreener.com"
 } /*EDITMODE-END*/;
 
@@ -109,10 +109,11 @@ function Masthead({ ca, twitterUrl, dexUrl }) {
             <a href="#who" className="nav-link">Who</a>
             <a href="#gallery" className="nav-link">Gallery</a>
             <a href="#about" className="nav-link">Manifesto</a>
+            <a className="nav-link" href={twitterUrl} target="_blank" rel="noreferrer noopener">Community</a>
           </nav>
           <div className="masthead-right">
             <a className="pill twitter" href={twitterUrl} target="_blank" rel="noreferrer noopener">
-              <IconTwitter /> Twitter
+              <IconTwitter /> Community
             </a>
             <a className="pill dex" href={dexUrl} target="_blank" rel="noreferrer noopener">
               <IconDex /> Dexscreener
@@ -420,9 +421,9 @@ function Footer({ ca, twitterUrl, dexUrl }) {
             </p>
           </div>
           <div className="footer-col">
-            <h4>FOLLOW US:</h4>
+            <h4>COMMUNITY:</h4>
             <ul>
-              <li><a className="twitter" href={twitterUrl} target="_blank" rel="noreferrer noopener">→ Twitter / X</a></li>
+              <li><a className="twitter" href={twitterUrl} target="_blank" rel="noreferrer noopener">→ @flomo_fomo on X</a></li>
               <li><a className="dex" href={dexUrl} target="_blank" rel="noreferrer noopener">→ Dexscreener</a></li>
               <li><a href="#gallery">→ Gallery</a></li>
               <li><a href="#about">→ Manifesto</a></li>
@@ -500,7 +501,7 @@ function Tweaks({ tweaks, set }) {
           onChange={(v) => set("ca", v)} />
         
         <TweakText
-          label="Twitter URL"
+          label="Community (X) URL"
           value={tweaks.twitterUrl}
           onChange={(v) => set("twitterUrl", v)} />
         
