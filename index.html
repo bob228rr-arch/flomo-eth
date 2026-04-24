@@ -7,32 +7,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
   <style>
     :root {
       --bg: #fafafa;
-      --bg-elevated: #ffffff;
       --ink: #0a0a0a;
       --ink-muted: #4a4a4a;
       --ink-faint: #8c8c8c;
-      --line: rgba(0, 0, 0, 0.08);
-      --glow: rgba(0, 0, 0, 0.04);
-      --radius: clamp(1rem, 2vw, 1.5rem);
+      --line: rgba(0, 0, 0, 0.1);
+      --radius: clamp(0.9rem, 1.5vw, 1.25rem);
       --font-sans: "DM Sans", system-ui, sans-serif;
       --font-serif: "Instrument Serif", Georgia, serif;
-      --space: clamp(1.5rem, 4vw, 3.5rem);
-      --accent: #ff4d2e;
-      --eth-blue: #627eea;
+      --space: clamp(1.5rem, 4vw, 2.75rem);
+      --inner: min(100% - 2rem, 72rem);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
     }
 
     body {
@@ -51,463 +44,307 @@
       position: fixed;
       inset: 0;
       z-index: 0;
-      opacity: 0.35;
+      opacity: 0.3;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       mix-blend-mode: multiply;
     }
 
-    a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--ink-faint); transition: border-color 0.2s, color 0.2s; }
-    a:hover { border-color: var(--ink); color: var(--ink); }
-
-    .wrap {
-      position: relative;
-      z-index: 1;
-      width: min(100% - 2rem, 72rem);
-      margin-inline: auto;
-      padding-block: var(--space);
+    .reveal {
+      opacity: 0;
+      transform: translateY(0.9rem);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; }
     }
 
-    header {
+    .band { position: relative; z-index: 1; }
+    .inner {
+      width: var(--inner);
+      margin-inline: auto;
+      padding: var(--space) 0;
+    }
+
+    /* —— Band 1: dark —— */
+    .band--dark {
+      background: #060606;
+      color: #f0f0f0;
+      min-height: min(88vh, 48rem);
+      display: flex;
+      flex-direction: column;
+    }
+    .band--dark .inner { flex: 1; display: flex; flex-direction: column; }
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      margin-bottom: clamp(2rem, 6vw, 3.5rem);
+      margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
     }
-
     .mark { font-weight: 700; letter-spacing: 0.04em; font-size: 0.9rem; }
     .pill {
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--ink-muted);
-      border: 1px solid var(--line);
+      color: #a8a8a8;
+      border: 1px solid #2a2a2a;
       padding: 0.35rem 0.65rem;
       border-radius: 999px;
-      background: var(--bg-elevated);
+      background: #111;
     }
-
-    .hero {
+    .split {
       display: grid;
-      gap: clamp(1.5rem, 4vw, 2.5rem);
+      gap: clamp(1.75rem, 4vw, 3rem);
       align-items: center;
-      margin-bottom: clamp(2.5rem, 6vw, 4rem);
+      flex: 1;
     }
     @media (min-width: 52rem) {
-      .hero { grid-template-columns: 0.9fr 1.1fr; }
+      .split--2 { grid-template-columns: 1fr 1.05fr; }
     }
-
-    .hero-figure {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .hero-figure::before {
-      content: "";
-      position: absolute;
-      inset: 5%;
-      border-radius: 50%;
-      background: radial-gradient(circle at 50% 40%, var(--glow) 0%, transparent 70%);
-    }
-    .hero-img {
-      position: relative;
-      width: min(100%, 20rem);
-      height: auto;
-      filter: drop-shadow(0 20px 50px rgba(0,0,0,0.1));
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .hero-img { animation: float 6s ease-in-out infinite; }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .hero-text h1 {
-      margin: 0 0 0.25em;
+    .t-dark h1 {
+      margin: 0 0 0.3em;
       font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+      font-size: clamp(2.3rem, 4.5vw, 3.4rem);
       font-weight: 400;
-      line-height: 1.05;
+      line-height: 1.04;
       letter-spacing: -0.02em;
     }
-    .hero-line {
+    .t-dark .tagline {
+      font-family: var(--font-serif);
+      font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+      line-height: 1.3;
+      color: #d4d4d4;
+      margin: 0 0 0.5rem;
+    }
+    .t-dark .bridge {
+      margin: 0;
+      color: #9a9a9a;
+      font-size: 0.95em;
       max-width: 32ch;
-      color: var(--ink-muted);
-      font-size: 1.02em;
     }
-
-    .bento {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(12, 1fr);
-      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
-    }
-    .bc {
-      grid-column: 1 / -1;
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-    }
-    @media (min-width: 48rem) {
-      .bc-6 { grid-column: span 6; }
-      .bc-4 { grid-column: span 4; }
-      .bc-8 { grid-column: span 8; }
-    }
-
-    .art-card {
-      background: var(--bg-elevated);
-      border: 1px solid var(--line);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 16px 40px -20px rgba(0,0,0,0.08);
-      transition: box-shadow 0.35s ease, transform 0.35s ease;
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .art-card[data-tilt] {
-        transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
-        transition: box-shadow 0.35s ease, transform 0.12s ease-out;
-        will-change: transform;
-      }
-    }
-    .art-card:hover { box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 24px 50px -18px rgba(0,0,0,0.12); }
-    .art-body { padding: 1rem 1.15rem 1.15rem; }
-    .art-kicker {
-      display: block;
-      font-size: 0.62rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--ink-faint);
-      margin-bottom: 0.35rem;
-    }
-    .art-title { margin: 0; font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; line-height: 1.25; }
-    .art-p { margin: 0.5rem 0 0; color: var(--ink-muted); font-size: 0.88rem; line-height: 1.5; }
-
-    .img-lift {
+    .highlight { color: #fff; font-weight: 500; }
+    .img-bleed {
       display: block;
       width: 100%;
-      height: auto;
-      vertical-align: middle;
-    }
-    .img-wrap { position: relative; overflow: hidden; }
-    .img-wrap--shake:hover .img-sniper { animation: muzzle-shake 0.45s ease; }
-    @keyframes muzzle-shake {
-      0%, 100% { transform: translate(0, 0) rotate(0); }
-      20% { transform: translate(2px, -1px) rotate(0.5deg); }
-      40% { transform: translate(-3px, 1px) rotate(-0.4deg); }
-      60% { transform: translate(2px, 1px) rotate(0.3deg); }
+      max-height: min(50vh, 24rem);
+      object-fit: contain;
+      object-position: right center;
+      filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
     }
 
-    .band-dark {
-      color: #f5f5f5;
-      background: #080808;
-      border: 1px solid #1a1a1a;
-    }
-    .band-dark .art-kicker { color: #888; }
-    .band-dark .art-p { color: #b8b8b8; }
-    .band-dark .art-title { color: #fff; }
-
-    .band-ice { background: linear-gradient(145deg, #e8f6ff 0%, #d6efff 100%); border-color: rgba(0,0,0,0.06); }
-
-    .band-mood {
-      background: #ece8e4;
-      border-color: #ddd9d4;
-    }
-
-    .trading { position: relative; }
-    .trading .img-lift { display: block; }
-    .ticker {
-      position: absolute;
-      bottom: 0.65rem;
-      left: 0.65rem;
-      right: 0.65rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem 0.8rem;
-      font-family: ui-monospace, monospace;
-      font-size: 0.64rem;
-      color: #fff;
-      text-shadow: 0 1px 2px #0008;
-    }
-    .ticker span {
-      padding: 0.2rem 0.4rem;
-      background: rgba(0,0,0,0.45);
-      border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .pump { color: #7cffb0; }
-    .wiggle { display: inline-block; animation: wiggle 3s ease-in-out infinite; }
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(-2deg); }
-      50% { transform: rotate(2deg); }
-    }
-
-    .plaque {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 8rem;
-      background: #111;
-      color: #eee;
-    }
-    .plaque p { margin: 0.25rem 0; font-family: var(--font-serif); font-size: 1.1rem; }
-    .plaque .big { font-size: clamp(1.6rem, 3vw, 2rem); letter-spacing: 0.04em; }
-
-    section { margin-bottom: clamp(2rem, 5vw, 3.5rem); }
-    .panel {
-      background: var(--bg-elevated);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: clamp(1.5rem, 4vw, 2.5rem);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 20px 50px -25px rgba(0,0,0,0.06);
-    }
+    /* —— Band 2: light + strip —— */
+    .band--light { background: var(--bg); }
+    .prose { max-width: 46rem; }
+    .prose h2, .h2 { margin: 0 0 0.4em; font-family: var(--font-serif); font-size: clamp(1.5rem, 2.8vw, 2.1rem); font-weight: 400; letter-spacing: -0.02em; }
     .kicker {
       display: block;
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: var(--ink-faint);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
     }
-    .stanzas {
-      display: grid;
-      gap: 0.5rem;
-      font-size: clamp(1.05rem, 2.1vw, 1.3rem);
+    .stanzas { margin: 0 0 1.6rem; }
+    .stanzas p, .body-copy p {
+      margin: 0 0 0.45rem;
       font-family: var(--font-serif);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
       line-height: 1.4;
-    }
-    .stanzas p { margin: 0; }
-    h2 {
-      margin: 0 0 0.5em;
-      font-family: var(--font-serif);
-      font-size: clamp(1.65rem, 3.2vw, 2.35rem);
-      font-weight: 400;
-      letter-spacing: -0.02em;
-    }
-    .body-copy p {
-      margin: 0 0 1.15em;
       color: var(--ink-muted);
-      max-width: 52ch;
     }
+    .stanzas p:last-of-type { margin-bottom: 0; }
+    .body-copy p { max-width: 52ch; }
     .body-copy p:last-child { margin-bottom: 0; }
-    .highlight { color: var(--ink); font-weight: 500; }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(1.1rem);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+    .body-copy { margin: 0 0 1.2rem; }
+    .prose--after { margin-top: 1.6rem; }
+    .highlight-light { color: var(--ink); font-weight: 500; }
+    .strip-label {
+      margin: 0 0 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ink-faint);
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-stagger > * { opacity: 0; transform: translateY(0.8rem); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible.reveal-stagger > * { opacity: 1; transform: translateY(0); }
-    .reveal.visible.reveal-stagger > *:nth-child(1) { transition-delay: 0.05s; }
-    .reveal.visible.reveal-stagger > *:nth-child(2) { transition-delay: 0.12s; }
-    .reveal.visible.reveal-stagger > *:nth-child(3) { transition-delay: 0.2s; }
-    .reveal.visible.reveal-stagger > *:nth-child(4) { transition-delay: 0.28s; }
-    .reveal.visible.reveal-stagger > *:nth-child(5) { transition-delay: 0.35s; }
-
-    [data-depth] { will-change: transform; transition: transform 0.15s ease-out; }
-
-    .cta {
-      text-align: center;
-      padding: clamp(2rem, 5vw, 3.2rem) clamp(1.5rem, 4vw, 2rem);
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    .strip-outer { margin: 0; width: 100%; }
+    .strip {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0 1.25rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    @media (min-width: 48rem) {
+      .strip-outer--bleed { margin-inline: calc(50% - 50vw); padding-inline: max(1rem, calc(50vw - 36rem)); }
+    }
+    .strip figure {
+      flex: 0 0 min(75vw, 20rem);
+      margin: 0;
+      height: 16.5rem;
+      scroll-snap-align: start;
+      background: #fff;
       border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
-    .cta p { margin: 0 auto 1rem; max-width: 40ch; color: var(--ink-muted); font-size: 1.02em; }
-    .cta strong {
-      display: block;
-      font-family: var(--font-serif);
-      font-size: clamp(1.3rem, 2.3vw, 1.55rem);
-      color: var(--ink);
-      font-weight: 400;
-      margin-bottom: 0.45rem;
+    .strip img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
     }
-    .cta-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
-    .cta-img { width: 100%; display: block; object-fit: cover; max-height: 14rem; }
-    .cta .fine { font-size: 0.86em; margin-bottom: 0; }
 
-    footer { text-align: center; color: var(--ink-faint); font-size: 0.8rem; padding-top: 1.5rem; }
+    /* —— Band 3: sunset —— */
+    .band--dusk {
+      background: linear-gradient(180deg, #f6f0eb 0%, #e8ddcf 40%, #dcd0c0 100%);
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .t-dusk h2 { color: #1a1a1a; }
+    .t-dusk p { color: #3d3a38; max-width: 40ch; }
+    .dusk-p { font-size: 1.02em; margin: 0 0 0.5rem; }
+    .dusk-fig {
+      display: block;
+      width: 100%;
+      max-height: min(50vh, 22rem);
+      object-fit: cover;
+      object-position: 50% 45%;
+      border-radius: var(--radius);
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .dusk-fig--wide { max-height: min(42vh, 18rem); }
+    @media (min-width: 52rem) {
+      .dusk-fig, .dusk-fig--wide { max-height: 17rem; }
+    }
+    .ir-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.3vw, 1.75rem);
+      margin: 0 0 0.35em;
+    }
+    .ir-p { color: #5c5855; font-size: 0.95em; margin: 0; }
+    .split-ferr { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+
+    footer { text-align: center; color: var(--ink-faint); font-size: 0.8rem; padding: 2rem 1rem; position: relative; z-index: 1; }
   </style>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
-  <div class="wrap">
-    <header>
-      <span class="mark">$FLOMO</span>
-      <span class="pill">FLORK FOMO</span>
-    </header>
 
-    <div class="hero">
-      <div class="hero-figure" data-depth="0.06">
-        <img class="hero-img" src="assets/hero-flork-eth.png" alt="Flork shrugging in ETH bucket hat" width="440" height="440" />
+  <section class="band band--dark" aria-label="Open">
+    <div class="inner">
+      <header class="topbar">
+        <span class="mark">$FLOMO</span>
+        <span class="pill">FLORK FOMO</span>
+      </header>
+      <div class="split split--2">
+        <div class="t-dark reveal" data-reveal>
+          <h1>Welcome to <span class="highlight">$FLOMO</span></h1>
+          <p class="tagline">It’s not personal. It’s just business.</p>
+          <p class="bridge">Same lane as: <span class="highlight">nothing personal</span>, just an <span class="highlight">$ETH</span> season.</p>
+        </div>
+        <div class="reveal" data-reveal>
+          <img
+            class="img-bleed"
+            src="assets/hero-tux-business.png"
+            alt="Flork in a tuxedo and ETH bucket hat, formal meme aesthetic"
+            width="800"
+            height="500"
+          />
+        </div>
       </div>
-      <div class="hero-text" data-depth="0.03">
-        <h1>Welcome to <span class="highlight">$FLOMO</span></h1>
-        <p class="hero-line">The sticker season moved chains. The hat stayed on.</p>
+    </div>
+  </section>
+
+  <section class="band band--light" aria-label="What is it">
+    <div class="inner">
+      <div class="reveal" data-reveal>
+        <div class="prose">
+          <span class="kicker">The vibe check</span>
+          <div class="stanzas">
+            <p>You're awake at 4am sniping <span class="highlight-light">$SOL</span> 20k mcaps on pump.fun</p>
+            <p>A whatsapp sticker from 2013 is at 18M</p>
+            <p>Nothing personal, just an <span class="highlight-light">$ETH</span> season</p>
+          </div>
+          <h2>What is FLOMO</h2>
+          <div class="body-copy">
+            <p>
+              <span class="highlight-light">FLOMO</span> is the feeling you get when a whatsapp sticker from 2013
+              is outperforming the entire solana memecoin market.
+            </p>
+            <p><span class="highlight-light">FLOMO</span> is a movement.</p>
+            <p>
+              While you were grinding pump.fun, ETH was quietly building the biggest meme
+              season in history. FLORK leading it and you missed it. that’s FLOMO.
+            </p>
+            <p>
+              But FLOMO isn’t here to laugh at you — it is here to invite you.
+              The bridge is open, ETH is waiting.
+            </p>
+          </div>
+        </div>
+        <p class="strip-label">The gallery (scroll →)</p>
       </div>
     </div>
-
-    <div class="bento reveal" data-reveal>
-      <article class="bc bc-8 art-card band-dark" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/hero-tux-business.png" alt="Flork in tux, ETH hat" width="800" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">Motto</span>
-          <h3 class="art-title">It’s not personal. It’s just business.</h3>
-          <p class="art-p">Same energy as: nothing personal — just an <span class="highlight" style="color:#fff">$ETH</span> season.</p>
-        </div>
-      </article>
-      <article class="bc bc-4 art-card" data-tilt>
-        <div class="img-wrap img-wrap--shake">
-          <img class="img-lift img-sniper" src="assets/flork-sniper-muzzle.png" alt="Flork muzzle flash sniper" width="500" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">4am energy</span>
-          <h3 class="art-title">Snipe culture</h3>
-          <p class="art-p">You’re awake grinding listings while the real show stages elsewhere. Hover the frame — feel the recoil.</p>
-        </div>
-      </article>
-    </div>
-
-    <section class="panel reveal" data-reveal>
-      <span class="kicker">The vibe check</span>
-      <div class="stanzas">
-        <p>You're awake at 4am sniping <span class="highlight">$SOL</span> 20k mcaps on pump.fun</p>
-        <p>A whatsapp sticker from 2013 is at 18M</p>
-        <p>Nothing personal, just an <span class="highlight">$ETH</span> season</p>
+    <div class="strip-outer strip-outer--bleed">
+      <div class="strip reveal" data-reveal aria-label="FLOMO meme art gallery">
+        <figure><img src="assets/hero-flork-eth.png" alt="Flork shrugging, bucket hat with Ethereum symbol" width="400" height="400" loading="lazy" /></figure>
+        <figure><img src="assets/flork-sniper-muzzle.png" alt="Flork with motion blur, muzzle flash" width="500" height="500" loading="lazy" /></figure>
+        <figure><img src="assets/flork-bear-dont-tread.png" alt="Flork behind a bear in a Gadsden headband" width="700" height="500" loading="lazy" /></figure>
+        <figure><img src="assets/wojak-champagne-serve.png" alt="Crying wojak serving Flork a drink" width="700" height="500" loading="lazy" /></figure>
+        <figure><img src="assets/flork-window-fomo.png" alt="Flork at a window, melancholy cartoon" width="500" height="500" loading="lazy" /></figure>
+        <figure><img src="assets/flork-bear-market.png" alt="Flork and a shocked bear" width="700" height="500" loading="lazy" /></figure>
+        <figure><img src="assets/flork-trading-ui.png" alt="Flork on a trading screen with arrows" width="1000" height="600" loading="lazy" /></figure>
+        <figure><img src="assets/merchant-memes-coat.png" alt="Flork as trenchcoat merchant with meme cards" width="700" height="500" loading="lazy" /></figure>
       </div>
-    </section>
-
-    <div class="bento reveal" data-reveal>
-      <article class="bc bc-6 art-card" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/flork-bear-dont-tread.png" alt="Flork with Gadsden bear" width="700" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">Mood</span>
-          <h3 class="art-title">Don’t tread on the rotation</h3>
-          <p class="art-p">Bears, bandanas, and a bucket hat of conviction. The meta doesn’t ask permission.</p>
-        </div>
-      </article>
-      <article class="bc bc-6 art-card" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/wojak-champagne-serve.png" alt="Crying wojak serving Flork" width="700" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">Class divide</span>
-          <h3 class="art-title">Table service, wrong side</h3>
-          <p class="art-p">While you were pouring gas into a Solana side quest, the house was already pouring the good stuff on ETH.</p>
-        </div>
-      </article>
     </div>
+  </section>
 
-    <div class="bento reveal" data-reveal>
-      <article class="bc bc-4 art-card band-mood" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/flork-window-fomo.png" alt="Flork at window" width="500" height="500" />
+  <section class="band band--dusk" aria-label="The bridge">
+    <div class="inner">
+      <div class="split split--2">
+        <div class="t-dusk reveal" data-reveal>
+          <h2>Stop refreshing the wrong chain.</h2>
+          <p class="dusk-p">Pack your memes, cross the bridge, and find your people on the other side. The bridge is open — <span class="highlight-light" style="color:#1a1a1a">ETH</span> is waiting.</p>
+          <p class="dusk-p" style="font-size:0.88em;color:#6b6662;margin-top:0.75rem">$FLOMO — Flork FOMO on Ethereum. Not financial advice. DYOR.</p>
         </div>
-        <div class="art-body">
-          <span class="art-kicker">Inner weather</span>
-          <h3 class="art-title">The view from FLOMO</h3>
-          <p class="art-p">That 4am stillness when you realize the sticker left without you. Melancholy, then motion.</p>
+        <div class="reveal" data-reveal>
+          <img
+            class="dusk-fig"
+            src="assets/flork-sunset-bridge.png"
+            alt="Flork on a boardwalk at sunset, looking at the water"
+            width="1200"
+            height="600"
+            loading="lazy"
+          />
         </div>
-      </article>
-      <article class="bc bc-8 art-card trading" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/flork-trading-ui.png" alt="Flork on trading chart UI" width="1000" height="600" />
-        </div>
-        <div class="ticker" aria-hidden="true">
-          <span class="pump wiggle">ETH +$FLOMO</span>
-          <span>11.560 ▲</span>
-          <span class="pump">+0.11%</span>
-          <span>rotation locked in</span>
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">Order flow</span>
-          <h3 class="art-title">The chart is a vibe check</h3>
-          <p class="art-p">Green arrows, noise, and a tiny hat in the center of the story. The UI scrolls. The message doesn’t change.</p>
-        </div>
-      </article>
-    </div>
-
-    <div class="bento reveal" data-reveal>
-      <article class="bc bc-6 art-card" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/flork-bear-market.png" alt="Flork and bear market cartoon" width="700" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">Market structure (meme)</span>
-          <h3 class="art-title">Bears, explained</h3>
-          <p class="art-p">When the narrative and the order book disagree, memes pick a winner. DYOR, obviously.</p>
-        </div>
-      </article>
-      <article class="bc bc-6 art-card" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/merchant-memes-coat.png" alt="RE4 merchant Flork with memes" width="700" height="500" />
-        </div>
-        <div class="art-body">
-          <span class="art-kicker">The plug</span>
-          <h3 class="art-title">“Memes? Oh I have those…”</h3>
-          <p class="art-p">Your trenchcoat dealer of culture — inventory tight, price discovery loose. The vault is on-chain.</p>
-        </div>
-      </article>
-    </div>
-
-    <section class="reveal" data-reveal>
-      <h2>What is FLOMO</h2>
-      <div class="body-copy">
-        <p>
-          <span class="highlight">FLOMO</span> is the feeling you get when a whatsapp sticker from 2013
-          is outperforming the entire solana memecoin market.
-        </p>
-        <p><span class="highlight">FLOMO</span> is a movement.</p>
-        <p>
-          While you were grinding pump.fun, ETH was quietly building the biggest meme
-          season in history. FLORK leading it and you missed it. that’s FLOMO.
-        </p>
-        <p>
-          But FLOMO isn’t here to laugh at you — it is here to invite you.
-          The bridge is open, ETH is waiting.
-        </p>
       </div>
-    </section>
-
-    <div class="cta reveal" data-reveal>
-      <div class="cta-wrap">
-        <img class="cta-img" src="assets/flork-sunset-bridge.png" alt="Flork at sunset by the water" data-depth="0.04" width="1200" height="600" />
+      <div class="split split--2 split-ferr">
+        <div class="t-dusk reveal" data-reveal>
+          <p class="ir-title">$FLOMO in the wild</p>
+          <p class="ir-p">IRL: proof the ticker is living rent-free.</p>
+        </div>
+        <div class="reveal" data-reveal>
+          <img
+            class="dusk-fig dusk-fig--wide"
+            src="assets/ferrari-fomo-plate.png"
+            alt="Rear of a car with a license plate that reads FLOMO"
+            width="1200"
+            height="700"
+            loading="lazy"
+          />
+        </div>
       </div>
-      <p style="margin-top:1.1rem">
-        <strong>Stop refreshing the wrong chain.</strong>
-        Pack your memes, cross the bridge, and find your people on the other side.
-      </p>
     </div>
+  </section>
 
-    <div class="bento reveal" data-reveal>
-      <article class="bc bc-12 art-card" data-tilt>
-        <div class="img-wrap">
-          <img class="img-lift" src="assets/ferrari-fomo-plate.png" alt="Ferrari with FLOMO license plate" width="1200" height="700" />
-        </div>
-        <div class="art-body plaque">
-          <span class="art-kicker" style="color:#999">IRL flex</span>
-          <p class="big" style="color:#fff">$FLOMO</p>
-          <p style="color:#aaa; font-size:0.9rem; font-family:var(--font-sans)">Spotted: proof of conviction in the wild.</p>
-        </div>
-      </article>
-    </div>
-
-    <section class="cta reveal reveal-stagger" data-reveal>
-      <p><strong>Same hat. New lane.</strong></p>
-      <p class="fine" style="margin:0;color:var(--ink-muted);font-size:0.95em">$FLOMO — Flork FOMO on Ethereum. Not financial advice. DYOR.</p>
-    </section>
-
-    <footer>
-      <p>© <span id="y"></span> $FLOMO</p>
-    </footer>
-  </div>
+  <footer>
+    <p>© <span id="y"></span> $FLOMO</p>
+  </footer>
 
   <script>
     (function () {
@@ -515,66 +352,23 @@
       if (y) y.textContent = String(new Date().getFullYear());
 
       var nodes = document.querySelectorAll("[data-reveal]");
-      function revealNow(el) {
-        el.classList.add("visible");
-      }
+      function revealNow(el) { el.classList.add("visible"); }
       if (!("IntersectionObserver" in window)) {
         nodes.forEach(revealNow);
-      } else {
-        var io = new IntersectionObserver(
-          function (entries) {
-            entries.forEach(function (e) {
-              if (e.isIntersecting) {
-                revealNow(e.target);
-                io.unobserve(e.target);
-              }
-            });
-          },
-          { rootMargin: "0px 0px -6% 0px", threshold: 0.08 }
-        );
-        nodes.forEach(function (el) { io.observe(el); });
+        return;
       }
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      document.querySelectorAll("[data-tilt]").forEach(function (card) {
-        card.addEventListener("mousemove", function (e) {
-          var r = card.getBoundingClientRect();
-          var x = (e.clientX - r.left) / r.width - 0.5;
-          var y = (e.clientY - r.top) / r.height - 0.5;
-          var rx = y * -10;
-          var ry = x * 12;
-          card.style.setProperty("--rx", rx + "deg");
-          card.style.setProperty("--ry", ry + "deg");
-        });
-        card.addEventListener("mouseleave", function () {
-          card.style.setProperty("--rx", "0deg");
-          card.style.setProperty("--ry", "0deg");
-        });
-      });
-
-      var depths = document.querySelectorAll("[data-depth]");
-      function parallax() {
-        var h = window.innerHeight;
-        depths.forEach(function (el) {
-          var f = parseFloat(el.getAttribute("data-depth") || "0.05");
-          var r = el.getBoundingClientRect();
-          var mid = r.top + r.height * 0.5;
-          var off = (mid - h * 0.5) * f * -0.15;
-          el.style.transform = "translate3d(0, " + off.toFixed(1) + "px, 0)";
-        });
-      }
-      var ticking = false;
-      window.addEventListener("scroll", function () {
-        if (!ticking) {
-          window.requestAnimationFrame(function () {
-            parallax();
-            ticking = false;
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              revealNow(e.target);
+              io.unobserve(e.target);
+            }
           });
-          ticking = true;
-        }
-      }, { passive: true });
-      parallax();
+        },
+        { rootMargin: "0px 0px -5% 0px", threshold: 0.06 }
+      );
+      nodes.forEach(function (el) { io.observe(el); });
     })();
   </script>
 </body>
