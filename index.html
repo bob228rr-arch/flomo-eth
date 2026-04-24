@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>$FLOMO — FLORK FOMO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg-elevated: #ffffff;
+      --ink: #0a0a0a;
+      --ink-muted: #4a4a4a;
+      --ink-faint: #8c8c8c;
+      --line: rgba(0, 0, 0, 0.08);
+      --glow: rgba(0, 0, 0, 0.04);
+      --radius: clamp(1rem, 2vw, 1.5rem);
+      --font-sans: "DM Sans", system-ui, sans-serif;
+      --font-serif: "Instrument Serif", Georgia, serif;
+      --space: clamp(1.5rem, 4vw, 3.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .grain {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+
+    a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--ink-faint); transition: border-color 0.2s, color 0.2s; }
+    a:hover { border-color: var(--ink); color: var(--ink); }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 2rem, 64rem);
+      margin-inline: auto;
+      padding-block: var(--space);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: clamp(2.5rem, 8vw, 5rem);
+    }
+
+    .mark {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.9rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: var(--bg-elevated);
+    }
+
+    .hero {
+      display: grid;
+      gap: clamp(2rem, 5vw, 3.5rem);
+      align-items: center;
+      margin-bottom: clamp(4rem, 12vw, 7rem);
+    }
+
+    @media (min-width: 48rem) {
+      .hero { grid-template-columns: 1fr 1.1fr; }
+    }
+
+    .hero-figure {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    .hero-figure::before {
+      content: "";
+      position: absolute;
+      inset: 8%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 40%, var(--glow) 0%, transparent 70%);
+    }
+
+    .hero-img {
+      position: relative;
+      width: min(100%, 22rem);
+      height: auto;
+      filter: drop-shadow(0 20px 50px rgba(0,0,0,0.08));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .hero-text h1 {
+      margin: 0 0 0.35em;
+      font-family: var(--font-serif);
+      font-size: clamp(2.75rem, 6vw, 4.25rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    section { margin-bottom: clamp(3.5rem, 10vw, 6rem); }
+
+    .panel {
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 20px 50px -25px rgba(0,0,0,0.06);
+    }
+
+    .kicker {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ink-faint);
+      margin-bottom: 0.75rem;
+    }
+
+    .stanzas {
+      display: grid;
+      gap: 0.5rem;
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-family: var(--font-serif);
+      line-height: 1.4;
+    }
+
+    .stanzas p { margin: 0; }
+
+    h2 {
+      margin: 0 0 0.5em;
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .body-copy p {
+      margin: 0 0 1.25em;
+      color: var(--ink-muted);
+      max-width: 52ch;
+    }
+
+    .body-copy p:last-child { margin-bottom: 0; }
+
+    .highlight {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(1rem);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cta {
+      text-align: center;
+      padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #ffffff 0%, #f3f3f3 100%);
+      border: 1px solid var(--line);
+    }
+
+    .cta p {
+      margin: 0 auto 1.25rem;
+      max-width: 40ch;
+      color: var(--ink-muted);
+      font-size: 1.05em;
+    }
+
+    .cta strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+      color: var(--ink);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--ink-faint);
+      font-size: 0.8rem;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <span class="mark">$FLOMO</span>
+      <span class="pill">FLORK FOMO</span>
+    </header>
+
+    <div class="hero">
+      <div class="hero-figure">
+        <img
+          class="hero-img"
+          src="assets/hero-flork-eth.png"
+          alt="Flork character in a bucket hat with Ethereum logo"
+          width="440"
+          height="440"
+        />
+      </div>
+      <div class="hero-text">
+        <h1>Welcome to <span class="highlight">$FLOMO</span></h1>
+      </div>
+    </div>
+
+    <section class="panel reveal" data-reveal>
+      <span class="kicker">The vibe check</span>
+      <div class="stanzas">
+        <p>You're awake at 4am sniping <span class="highlight">$SOL</span> 20k mcaps on pump.fun</p>
+        <p>A whatsapp sticker from 2013 is at 18M</p>
+        <p>Nothing personal, just an <span class="highlight">$ETH</span> season</p>
+      </div>
+    </section>
+
+    <section class="reveal" data-reveal>
+      <h2>What is FLOMO</h2>
+      <div class="body-copy">
+        <p>
+          <span class="highlight">FLOMO</span> is the feeling you get when a whatsapp sticker from 2013
+          is outperforming the entire solana memecoin market.
+        </p>
+        <p><span class="highlight">FLOMO</span> is a movement.</p>
+        <p>
+          While you were grinding pump.fun, ETH was quietly building the biggest meme
+          season in history. FLORK leading it and you missed it. that’s FLOMO.
+        </p>
+        <p>
+          But FLOMO isn’t here to laugh at you — it is here to invite you.
+          The bridge is open, ETH is waiting.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta reveal" data-reveal>
+      <p>
+        <strong>Stop refreshing the wrong chain.</strong>
+        Pack your memes, cross the bridge, and find your people on the other side.
+      </p>
+      <p style="margin-bottom:0; font-size:0.9em;">$FLOMO — Flork FOMO on Ethereum. Not financial advice. DYOR.</p>
+    </section>
+
+    <footer>
+      <p>© <span id="y"></span> $FLOMO</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var y = document.getElementById("y");
+      if (y) y.textContent = String(new Date().getFullYear());
+      var nodes = document.querySelectorAll("[data-reveal]");
+      if (!("IntersectionObserver" in window)) {
+        nodes.forEach(function (el) { el.classList.add("visible"); });
+        return;
+      }
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+      );
+      nodes.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
