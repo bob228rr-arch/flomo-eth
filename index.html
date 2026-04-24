@@ -1,328 +1,966 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>$FLOMO — FLORK FOMO</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
-  <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
-  <style>
-    :root {
-      --bg: #ffffff;
-      --ink: #1a1a1a;
-      --ink-soft: #3d3d3d;
-      --line: #252525;
-      --pin: #e85d5d;
-      --pin-shine: #ff9a9a;
-      --tape: rgba(255, 235, 120, 0.55);
-      --font-hand: "Caveat", cursive;
-      --font-doodle: "Patrick Hand", cursive;
-      --gutter: clamp(1rem, 4vw, 2.5rem);
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--font-hand);
-      font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-      line-height: 1.35;
-      -webkit-font-smoothing: antialiased;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .reveal { opacity: 1 !important; transform: none !important; }
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>$FLOMO — FLORK FOMO</title>
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(12px) rotate(0.2deg);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Gloock&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    /* —— Bulletin shell —— */
-    .board {
-      position: relative;
-      z-index: 1;
-      max-width: 58rem;
-      margin: 0 auto;
-      padding: 1.25rem var(--gutter) 3.5rem;
-    }
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #ffffff;
+    --rule: #0a0a0a;
+    --muted: #666;
+    --soft: #f2f2f0;
+    --twitter: #1d9bf0;
+    --dex: #00d26a;
+    --hover-fade: 0.25;
+    --crooked: 1;
+  }
 
-    .bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 0 1.25rem;
-      margin-bottom: 0.5rem;
-      border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent);
-    }
-    .bar__title {
-      font-family: var(--font-doodle);
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      letter-spacing: 0.02em;
-      transform: rotate(-0.5deg);
-    }
-    .bar__tag {
-      font-family: var(--font-doodle);
-      font-size: 1.05rem;
-      color: var(--ink-soft);
-      transform: rotate(1deg);
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* —— Note cards (doodle) —— */
-    .note {
-      position: relative;
-      background: #fff;
-      border: 2px solid var(--line);
-      padding: 1.35rem 1.5rem 1.5rem;
-      margin-bottom: 1.75rem;
-      box-shadow:
-        3px 4px 0 rgba(0,0,0,0.04),
-        5px 8px 24px -6px rgba(0,0,0,0.08);
-    }
-    .note--tilt-1 { transform: rotate(-0.6deg); border-radius: 255px 12px 225px 12px / 8px 225px 12px 255px; }
-    .note--tilt-2 { transform: rotate(0.8deg); border-radius: 12px 255px 12px 225px / 255px 12px 225px 12px; }
-    .pin {
-      position: absolute;
-      z-index: 2;
-      top: -0.5rem;
-      left: 50%;
-      width: 1rem;
-      height: 1rem;
-      margin-left: -0.5rem;
-      border-radius: 50%;
-      background: radial-gradient(circle at 32% 28%, var(--pin-shine), var(--pin) 45%, #a02828 100%);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(0,0,0,0.15);
-    }
-    .note--no-center-pin .pin { left: 18%; margin-left: 0; }
-    .note--no-center-pin--r .pin { left: auto; right: 12%; margin-left: 0; }
-    .tape {
-      position: absolute;
-      height: 0.7rem;
-      left: 12%;
-      right: 12%;
-      top: 0.15rem;
-      background: var(--tape);
-      opacity: 0.9;
-      border-radius: 1px;
-      transform: rotate(-0.3deg);
-      pointer-events: none;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
-    }
-    h1 {
-      font-family: var(--font-doodle);
-      font-size: clamp(2.1rem, 5vw, 3rem);
-      font-weight: 400;
-      line-height: 1.1;
-      margin: 0 0 0.4em;
-      transform: rotate(-0.2deg);
-    }
-    h2, .c-block h2 {
-      font-family: var(--font-doodle);
-      font-size: clamp(1.5rem, 2.8vw, 2rem);
-      font-weight: 400;
-      margin: 0.6em 0 0.35em;
-    }
-    .lede { margin: 0.15em 0; color: var(--ink); font-size: 1.1em; }
-    .kicker {
-      display: block;
-      font-family: var(--font-doodle);
-      font-size: 0.95em;
-      color: var(--ink-soft);
-      margin: 0.75rem 0 0.35rem;
-      transform: rotate(0.5deg);
-    }
-    .stanzas p, .body-copy p, .c-block p { margin: 0.2em 0; color: var(--ink); font-size: 1.02em; }
-    .stanzas { margin-bottom: 0.5rem; }
-    .hl { font-weight: 600; }
-    .fine { font-size: 0.9em !important; color: #555 !important; }
-    .spacer { height: 0.4rem; }
+  html { scroll-behavior: smooth; }
 
-    /* —— Photo notes —— */
-    .shot {
-      position: relative;
-      padding: 0.65rem 0.65rem 1.75rem;
-      background: #fff;
-      border: 2px solid var(--line);
-      margin: 0 auto 2rem;
-      max-width: min(100%, 40rem);
-      box-shadow: 3px 5px 0 rgba(0,0,0,0.04), 8px 12px 30px -8px rgba(0,0,0,0.1);
-    }
-    .shot--lg { max-width: min(100%, 48rem); }
-    .shot--tilt-1 { transform: rotate(0.5deg); border-radius: 4px; }
-    .shot--tilt-2 { transform: rotate(-0.7deg); border-radius: 3px; }
-    .shot img {
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: min(68vh, 30rem);
-      object-fit: contain;
-      background: #fff;
-    }
-    .shot--dark img { background: #0a0a0a; }
-    .shot .tape { top: 0.2rem; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
 
-    /* —— Sticker grid (frames hug each image) —— */
-    .mosaic {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      align-content: flex-start;
-      gap: 0.75rem 0.9rem;
-      padding: 0.5rem 0 1.5rem;
-    }
-    .sticker {
-      position: relative;
-      flex: 0 1 auto;
-      width: min(42vw, 12.75rem);
-      max-width: 100%;
-      margin: 0;
-      padding: 0.35rem 0.4rem 0.45rem;
-      background: #fff;
-      border: 2px solid var(--line);
-      box-shadow: 2px 3px 0 rgba(0,0,0,0.04), 3px 8px 16px -4px rgba(0,0,0,0.1);
-    }
-    .sticker .pin { top: 0.1rem; left: 0.75rem; margin-left: 0; }
-    @media (min-width: 40rem) {
-      .sticker { width: 12.25rem; }
-    }
-    .sticker:nth-child(1)  { transform: rotate(-1.2deg); border-radius: 3px; }
-    .sticker:nth-child(2)  { transform: rotate(0.8deg); border-radius: 4px 2px; }
-    .sticker:nth-child(3)  { transform: rotate(1deg); }
-    .sticker:nth-child(4)  { transform: rotate(-0.6deg); }
-    .sticker:nth-child(5)  { transform: rotate(-0.9deg); }
-    .sticker:nth-child(6)  { transform: rotate(0.4deg); }
-    .sticker:nth-child(7)  { transform: rotate(1.1deg); }
-    @media (prefers-reduced-motion: reduce) {
-      .note, .shot, .sticker { transform: none !important; }
-    }
-    .sticker img {
-      display: block;
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-    }
-    .sticker::after {
-      content: "";
-      position: absolute;
-      top: 0.1rem; left: 50%;
-      width: 38%;
-      height: 0.5rem;
-      margin-left: -19%;
-      background: var(--tape);
-      opacity: 0.85;
-      border-radius: 1px;
-      transform: rotate(-1.5deg);
-    }
+  img { display: block; max-width: 100%; height: auto; }
 
-    .c-block { padding: 0; margin-top: 0.5rem; }
+  /* ======================================================
+     TYPE SYSTEM
+     Caveat = crooked/handwritten (chaos)
+     Gloock = editorial serif (accent)
+     Inter = clean body (order)
+     JetBrains Mono = meta/chrome
+     ====================================================== */
 
-    footer {
-      text-align: center;
-      font-family: var(--font-doodle);
-      color: #888;
-      font-size: 1.05rem;
-      padding: 1.5rem 1rem 2rem;
-      border-top: 2px dashed color-mix(in srgb, var(--line) 25%, transparent);
-    }
-  </style>
-</head>
-<body>
-  <div class="board">
-    <header class="bar">
-      <span class="bar__title">$FLOMO</span>
-      <span class="bar__tag">~ bulletin ~</span>
-    </header>
+  .crooked {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
 
-    <main>
-      <article class="note note--tilt-1 reveal" data-reveal>
-        <span class="pin" aria-hidden="true"></span>
-        <span class="tape" aria-hidden="true"></span>
-        <h1>Welcome to <span class="hl">$FLOMO</span></h1>
-        <p class="lede">It’s not personal. It’s just business.</p>
-        <p class="lede">The same line as: nothing personal — just an <span class="hl">$ETH</span> season.</p>
-        <div class="spacer" aria-hidden="true"></div>
-        <span class="kicker">The vibe check ~</span>
-        <div class="stanzas">
-          <p>You're awake at 4am sniping <span class="hl">$SOL</span> 20k mcaps on pump.fun</p>
-          <p>A whatsapp sticker from 2013 is at 18M</p>
-          <p>Nothing personal, just an <span class="hl">$ETH</span> season</p>
-        </div>
-        <h2>What is FLOMO</h2>
-        <div class="body-copy">
-          <p><span class="hl">FLOMO</span> is the feeling you get when a whatsapp sticker from 2013 is outperforming the entire solana memecoin market.</p>
-          <p><span class="hl">FLOMO</span> is a movement.</p>
-          <p>While you were grinding pump.fun, ETH was quietly building the biggest meme season in history. FLORK leading it and you missed it. that’s FLOMO.</p>
-          <p>But FLOMO isn’t here to laugh at you — it is here to invite you. The bridge is open, ETH is waiting.</p>
-        </div>
-      </article>
+  /* Randomize each char rotation for true messy feel */
+  .crooked .ch {
+    display: inline-block;
+    transform-origin: 50% 80%;
+    transition: transform 0.25s ease;
+  }
 
-      <div class="shot shot--lg shot--tilt-1 shot--dark note--no-center-pin reveal" data-reveal>
-        <span class="pin" aria-hidden="true"></span>
-        <span class="tape" aria-hidden="true"></span>
-        <img src="assets/hero-tux-business.png" alt="Flork in a tuxedo, ETH bucket hat" width="800" height="500" />
-      </div>
+  .editorial {
+    font-family: 'Gloock', 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
 
-      <div class="mosaic" aria-label="Pinned stickers">
-        <figure class="sticker reveal" data-reveal><img src="assets/hero-flork-eth.png" alt="Flork shrugging, Ethereum hat" width="400" height="400" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/flork-sniper-muzzle.png" alt="Flork with muzzle flash" width="500" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/flork-bear-dont-tread.png" alt="Flork and bear, Gadsden headband" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/wojak-champagne-serve.png" alt="Crying wojak pouring a drink for Flork" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/flork-window-fomo.png" alt="Flork at a window" width="500" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/flork-trading-ui.png" alt="Flork on trading interface" width="1000" height="600" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-        <figure class="sticker reveal" data-reveal><img src="assets/merchant-memes-coat.png" alt="Flork as meme merchant" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
-      </div>
+  .mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-      <div class="note note--tilt-2 c-block reveal" data-reveal>
-        <span class="pin" aria-hidden="true"></span>
-        <span class="tape" aria-hidden="true"></span>
-        <h2>Stop refreshing the wrong chain</h2>
-        <p>Pack your memes, cross the bridge, and find your people on the other side. The bridge is open — <span class="hl">ETH</span> is waiting.</p>
-        <p class="fine">$FLOMO — Flork FOMO on Ethereum. Not financial advice. DYOR.</p>
-      </div>
+  .body-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
 
-      <div class="shot shot--lg shot--tilt-2 note--no-center-pin--r reveal" data-reveal>
-        <span class="pin" aria-hidden="true"></span>
-        <span class="tape" aria-hidden="true"></span>
-        <img src="assets/flork-sunset-bridge.png" alt="Flork on a boardwalk at sunset" width="1200" height="600" loading="lazy" />
-      </div>
+  /* ======================================================
+     EDITORIAL SCAFFOLD
+     ====================================================== */
 
-      <div class="shot shot--tilt-1 note--no-center-pin reveal" data-reveal>
-        <span class="pin" aria-hidden="true"></span>
-        <span class="tape" aria-hidden="true"></span>
-        <img src="assets/ferrari-fomo-plate.png" alt="Ferrari rear with a FLOMO license plate" width="1200" height="700" loading="lazy" />
-      </div>
-    </main>
-  </div>
+  .rule {
+    border: 0;
+    border-top: 1px solid var(--ink);
+    width: 100%;
+  }
 
-  <footer>
-    <p>© <span id="y"></span> $FLOMO</p>
-  </footer>
+  .rule-thin {
+    border: 0;
+    border-top: 1px solid var(--ink);
+    opacity: 0.15;
+  }
 
-  <script>
-    (function () {
-      var y = document.getElementById("y");
-      if (y) y.textContent = String(new Date().getFullYear());
-      var nodes = document.querySelectorAll("[data-reveal]");
-      function on(el) { el.classList.add("visible"); }
-      if (!("IntersectionObserver" in window)) { nodes.forEach(on); return; }
-      var io = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) { on(e.target); io.unobserve(e.target); }
-          });
-        },
-        { rootMargin: "0px 0px -2% 0px", threshold: 0.04 }
+  .container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  @media (max-width: 720px) {
+    .container { padding: 0 20px; }
+  }
+
+  /* ======================================================
+     HEADER — masthead style
+     ====================================================== */
+
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .masthead-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 0;
+  }
+
+  .masthead-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .masthead-brand {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    display: inline-block;
+    transform: rotate(-2deg);
+  }
+
+  .masthead-center {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .masthead-right {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 6px 0;
+    position: relative;
+    transition: color 0.25s ease, transform 0.25s ease;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .pill:hover {
+    transform: scale(1.04);
+  }
+
+  .pill.twitter:hover { color: var(--twitter); border-color: var(--twitter); }
+  .pill.dex:hover { color: var(--dex); border-color: var(--dex); }
+
+  .pill svg { width: 12px; height: 12px; }
+
+  .ca-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    background: var(--paper);
+  }
+
+  .ca-pill .ca-label {
+    padding: 8px 10px 8px 14px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .ca-pill .ca-value {
+    padding: 8px 10px;
+    color: var(--ink);
+    border-left: 1px solid #0001;
+    user-select: all;
+  }
+
+  .ca-pill .ca-copy {
+    border: 0;
+    border-left: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .ca-pill .ca-copy:hover { background: #333; transform: scale(1.02); }
+  .ca-pill .ca-copy.copied { background: var(--dex); color: white; }
+
+  /* ======================================================
+     ISSUE META STRIP
+     ====================================================== */
+
+  .issue-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .issue-strip > div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .issue-strip .dim { color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .issue-strip { grid-template-columns: repeat(2, 1fr); gap: 8px 24px; }
+  }
+
+  /* ======================================================
+     HERO
+     ====================================================== */
+
+  .hero {
+    padding: 56px 0 80px;
+    position: relative;
+  }
+
+  .hero-top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .hero-issue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .hero-kicker {
+    text-align: center;
+    font-family: 'Gloock', serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+  }
+
+  .hero-page {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .hero-title-wrap {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .hero-who {
+    font-family: 'Gloock', serif;
+    font-weight: 400;
+    font-size: clamp(56px, 10vw, 140px);
+    letter-spacing: -0.035em;
+    line-height: 0.92;
+    margin-bottom: 8px;
+  }
+
+  .hero-who .italic { font-style: italic; }
+
+  .hero-sub {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: clamp(48px, 8vw, 110px);
+    line-height: 0.9;
+    margin-top: -10px;
+  }
+
+  .hero-image-wrap {
+    position: relative;
+    margin: 24px auto 40px;
+    max-width: 560px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Replace with main character image */
+  .hero-image-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+  }
+
+  .hero-image-wrap .corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--ink);
+  }
+  .hero-image-wrap .corner.tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+  .hero-image-wrap .corner.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .hero-image-wrap .corner.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+  .hero-image-wrap .corner.br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+  .hero-image-caption {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .hero-floater {
+    position: absolute;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    color: var(--ink);
+    pointer-events: none;
+  }
+
+  .hero-floater.left {
+    top: 40%;
+    left: -4%;
+    font-size: 28px;
+    transform: rotate(-8deg);
+  }
+  .hero-floater.right {
+    top: 60%;
+    right: -4%;
+    font-size: 28px;
+    transform: rotate(6deg);
+  }
+
+  .hero-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .hero-billboard {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+    padding: 40px 0 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .hero-billboard { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  .hero-billboard .col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .hero-billboard .col-headline {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 0.95;
+    margin-bottom: 8px;
+    display: inline-block;
+    transform: rotate(-1.5deg);
+  }
+
+  .hero-billboard p {
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 44ch;
+  }
+
+  .hero-dropcap::first-letter {
+    font-family: 'Gloock', serif;
+    font-size: 54px;
+    float: left;
+    line-height: 0.9;
+    padding: 4px 8px 0 0;
+    font-weight: 400;
+  }
+
+  /* ======================================================
+     MARQUEE
+     ====================================================== */
+
+  .section-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 24px;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--ink);
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .section-label.right { text-align: right; }
+
+  .section-title {
+    font-family: 'Gloock', serif;
+    font-size: clamp(36px, 6vw, 80px);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    text-align: center;
+  }
+
+  .section-title .italic { font-style: italic; }
+
+  .section-sub {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: clamp(30px, 4vw, 52px);
+    text-align: center;
+    display: inline-block;
+    transform: rotate(-1deg);
+  }
+
+  .marquee-wrap {
+    overflow: hidden;
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--ink);
+    border-top: 1px solid var(--ink);
+    position: relative;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+  }
+
+  .marquee-wrap:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .marquee-wrap:hover .meme-card:not(:hover) {
+    opacity: var(--hover-fade);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .meme-card {
+    flex: 0 0 auto;
+    width: 260px;
+    aspect-ratio: 1 / 1;
+    background: var(--soft);
+    border: 1px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .meme-card:hover {
+    transform: scale(1.08);
+    z-index: 2;
+  }
+
+  .meme-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .meme-card:hover img {
+    transform: scale(1.04);
+  }
+
+  /* Placeholder pattern for empty meme cards */
+  .meme-card.placeholder {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        var(--soft) 0 14px,
+        #e8e8e6 14px 28px
       );
-      nodes.forEach(function (el) { io.observe(el); });
-    })();
-  </script>
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .meme-card .meme-index {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    z-index: 2;
+  }
+
+  .meme-card .meme-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 6px 8px;
+    display: inline-block;
+    width: fit-content;
+    max-width: calc(100% - 24px);
+    transform: rotate(-1.2deg);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .meme-card .placeholder-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 6px 10px;
+    border: 1px solid var(--ink);
+  }
+
+  .marquee-footnote {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ======================================================
+     ABOUT
+     ====================================================== */
+
+  .about {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  .about-head {
+    margin-bottom: 40px;
+  }
+
+  .about-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .about-title {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: clamp(60px, 9vw, 132px);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+  }
+
+  .about-title .ch { display: inline-block; transform-origin: 50% 80%; }
+
+  .about-body {
+    max-width: 52ch;
+  }
+
+  .about-body p {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+
+  .about-body p:first-of-type {
+    font-family: 'Gloock', serif;
+    font-size: 22px;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .about-image {
+    position: relative;
+    margin-top: 20px;
+    transform: rotate(2.5deg);
+    animation: float 8s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: rotate(2.5deg) translateY(0); }
+    50% { transform: rotate(2deg) translateY(-10px); }
+  }
+
+  .about-image-frame {
+    aspect-ratio: 6/7;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Replace with supporting meme image */
+  .about-image-frame img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+  }
+
+  .about-image-tag {
+    position: absolute;
+    bottom: -16px;
+    right: -8px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: rotate(-4deg);
+  }
+
+  /* Stat row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-top: 64px;
+  }
+  .stat {
+    padding: 28px 20px;
+    border-right: 1px solid var(--ink);
+  }
+  .stat:last-child { border-right: 0; }
+  .stat .stat-value {
+    font-family: 'Gloock', serif;
+    font-size: 40px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: 0; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--ink); }
+  }
+
+  /* ======================================================
+     FOOTER
+     ====================================================== */
+
+  .footer {
+    padding: 80px 0 40px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    margin-bottom: 72px;
+  }
+
+  @media (max-width: 900px) {
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  .footer-brand {
+    font-family: 'Gloock', serif;
+    font-size: clamp(60px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+
+  .footer-brand .italic { font-style: italic; }
+
+  .footer-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col li {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .footer-col a {
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.25s ease, letter-spacing 0.25s ease;
+  }
+  .footer-col a:hover {
+    letter-spacing: 0.01em;
+  }
+  .footer-col a.twitter:hover { color: var(--twitter); }
+  .footer-col a.dex:hover { color: var(--dex); }
+
+  .footer-image {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: right;
+    margin-left: 20px;
+  }
+  /* Replace footer image */
+  .footer-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+  }
+
+  .footer-mid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding: 24px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .disclaimer {
+    font-family: 'Gloock', serif;
+    font-style: italic;
+    font-size: 18px;
+    max-width: 64ch;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .disclaimer::before {
+    content: '"';
+    font-size: 40px;
+    line-height: 0;
+    vertical-align: -10px;
+    margin-right: 4px;
+  }
+  .disclaimer::after {
+    content: '"';
+    font-size: 40px;
+    line-height: 0;
+    vertical-align: -10px;
+    margin-left: 4px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ======================================================
+     TICKER
+     ====================================================== */
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 0;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: marquee 45s linear infinite;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .ticker-track span { white-space: nowrap; display: inline-flex; align-items: center; gap: 16px; }
+  .ticker-track .dot { width: 6px; height: 6px; background: var(--paper); border-radius: 50%; display: inline-block; }
+
+  /* ======================================================
+     BIG WORD BREAK
+     ====================================================== */
+  .bigword {
+    padding: 96px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--ink);
+  }
+  .bigword .line1 {
+    font-family: 'Gloock', serif;
+    font-size: clamp(56px, 12vw, 180px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+  .bigword .line1 .italic { font-style: italic; }
+  .bigword .line2 {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: clamp(40px, 7vw, 96px);
+    margin-top: 8px;
+    display: inline-block;
+    transform: rotate(-1.5deg);
+  }
+  .bigword .sup {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Tiny eth diamond */
+  .eth-diamond {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    background: currentColor;
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    margin: 0 0.1em;
+    transform: translateY(0.02em);
+  }
+
+  /* Selection */
+  ::selection { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<!-- ============ LIBS ============ -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
 </body>
 </html>
