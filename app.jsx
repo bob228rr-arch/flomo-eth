@@ -10,7 +10,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "showEditorialExtras": true,
   "ca": "HztbgJzJVgSfqPvithdSBMnib1w7CJ4QVg3r1YNkpump",
   "twitterUrl": "https://x.com/flomo_fomo",
-  "dexUrl": "https://dexscreener.com"
+  "dexUrl": "https://dexscreener.com/solana/cgv7brrsnzdul4d41dhec1fx2md6kxuodyf5hr1siw28"
 } /*EDITMODE-END*/;
 
 /* ============================================================
