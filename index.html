@@ -6,144 +6,251 @@
   <title>$FLOMO — FLORK FOMO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet" />
   <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
   <style>
     :root {
-      --bg: #f7f7f5;
-      --ink: #0a0a0a;
-      --ink-muted: #454545;
-      --ink-faint: #7a7a7a;
-      --line: rgba(0, 0, 0, 0.1);
-      --radius: 0.4rem;
-      --font-sans: "DM Sans", system-ui, sans-serif;
-      --font-serif: "Instrument Serif", Georgia, serif;
-      --gutter: clamp(1.25rem, 4vw, 3rem);
-      --prose: min(100% - 2 * var(--gutter), 38rem);
+      --bg: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #3d3d3d;
+      --line: #252525;
+      --pin: #e85d5d;
+      --pin-shine: #ff9a9a;
+      --tape: rgba(255, 235, 120, 0.55);
+      --font-hand: "Caveat", cursive;
+      --font-doodle: "Patrick Hand", cursive;
+      --gutter: clamp(1rem, 4vw, 2.5rem);
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
+      min-height: 100vh;
       background: var(--bg);
       color: var(--ink);
-      font-family: var(--font-sans);
-      font-size: clamp(1rem, 0.92rem + 0.3vw, 1.1rem);
-      line-height: 1.6;
+      font-family: var(--font-hand);
+      font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+      line-height: 1.35;
       -webkit-font-smoothing: antialiased;
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .reveal { opacity: 1 !important; transform: none !important; }
     }
-    .grain {
-      pointer-events: none; position: fixed; inset: 0; z-index: 0;
-      opacity: 0.25;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      mix-blend-mode: multiply;
-    }
+
     .reveal {
-      opacity: 0; transform: translateY(0.6rem);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      opacity: 0;
+      transform: translateY(12px) rotate(0.2deg);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    a { color: inherit; }
-    .site {
-      position: relative; z-index: 1;
-    }
-    .bar {
-      position: sticky; top: 0; z-index: 2;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.85rem var(--gutter);
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line);
-    }
-    .mark { font-weight: 700; letter-spacing: 0.06em; font-size: 0.78rem; }
-    .sub { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
-
-    .flow { max-width: var(--prose); margin: 0 auto; padding: clamp(2.5rem, 7vw, 4.5rem) 0; }
-    .flow h1 {
-      margin: 0 0 0.2em; font-family: var(--font-serif);
-      font-size: clamp(2.1rem, 5vw, 3.1rem); font-weight: 400; line-height: 1.04; letter-spacing: -0.03em;
-    }
-    .flow .lede, .stanzas p, .body-copy p, .kicker, .c-block p, .c-block h2 { font-family: var(--font-serif); }
-    .lede { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.3; color: #222; margin: 0 0 0.4em; }
-    .lede + .lede { font-size: clamp(0.95rem, 1.4vw, 1.1rem); color: var(--ink-muted); margin-top: 0.75rem; }
-    .kicker { display: block; font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 0.5rem; }
-    .h2 { margin: 0 0 0.4em; font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 400; letter-spacing: -0.02em; }
-    .stanzas p, .body-copy p { margin: 0 0 0.4rem; color: var(--ink-muted); font-size: clamp(1.02rem, 1.6vw, 1.2rem); line-height: 1.45; }
-    .stanzas { margin-bottom: 1.75rem; }
-    .body-copy { margin: 0; }
-    .hl { color: var(--ink); font-weight: 500; }
-    .spacer { height: 0.5rem; }
-
-    .c-block { padding: 0 var(--gutter) clamp(2.5rem, 6vw, 3.5rem); max-width: var(--prose); margin: 0 auto; }
-    .c-block h2 { margin: 0 0 0.4em; font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 400; }
-    .c-block p { color: var(--ink-muted); font-size: 1.02em; line-height: 1.5; max-width: 40ch; margin: 0 0 0.4rem; }
-    .fine { font-size: 0.82em !important; color: #666 !important; }
-
-    .bleed { margin: 0; width: 100%; position: relative; }
-    .bleed--ink { background: #050505; min-height: min(70vh, 32rem); display: flex; align-items: center; justify-content: center; padding: 2.5rem var(--gutter); }
-    .bleed--dusk { background: linear-gradient(185deg, #efefe9 0%, #e0d8d0 100%); min-height: min(60vh, 28rem); display: flex; align-items: center; justify-content: center; padding: 2.5rem var(--gutter); }
-    .bleed img, .fig-wide img, .fig-narrow img {
-      display: block; width: 100%; max-width: min(100%, 64rem);
-      max-height: min(70vh, 32rem);
-      object-fit: contain; margin: 0 auto;
-    }
-    .fig-wide img { border-radius: var(--radius); }
-    .fig-narrow { max-width: min(100% - 2rem, 42rem); margin: 0 auto; padding: 0 0 clamp(1rem, 3vw, 1.5rem); }
-    .fig-narrow img { max-height: min(50vh, 20rem); }
-
-    .mosaic {
-      display: grid;
-      gap: 0.5rem;
-      grid-template-columns: repeat(2, 1fr);
-      padding: 0 var(--gutter) clamp(2.5rem, 6vw, 4rem);
-      max-width: 72rem;
+    /* —— Bulletin shell —— */
+    .board {
+      position: relative;
+      z-index: 1;
+      max-width: 58rem;
       margin: 0 auto;
+      padding: 1.25rem var(--gutter) 3.5rem;
     }
-    @media (min-width: 40rem) {
-      .mosaic { grid-template-columns: repeat(3, 1fr); gap: 0.65rem; }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0 1.25rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 2px dashed color-mix(in srgb, var(--line) 35%, transparent);
     }
-    @media (min-width: 64rem) {
-      .mosaic { grid-template-columns: repeat(4, 1fr); }
+    .bar__title {
+      font-family: var(--font-doodle);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: 0.02em;
+      transform: rotate(-0.5deg);
     }
-    .mosaic figure {
-      margin: 0; aspect-ratio: 1; background: #fff;
-      border: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; border-radius: 2px;
+    .bar__tag {
+      font-family: var(--font-doodle);
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      transform: rotate(1deg);
     }
-    .mosaic img { width: 100%; height: 100%; object-fit: contain; padding: 0.4rem; }
+
+    /* —— Note cards (doodle) —— */
+    .note {
+      position: relative;
+      background: #fff;
+      border: 2px solid var(--line);
+      padding: 1.35rem 1.5rem 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow:
+        3px 4px 0 rgba(0,0,0,0.04),
+        5px 8px 24px -6px rgba(0,0,0,0.08);
+    }
+    .note--tilt-1 { transform: rotate(-0.6deg); border-radius: 255px 12px 225px 12px / 8px 225px 12px 255px; }
+    .note--tilt-2 { transform: rotate(0.8deg); border-radius: 12px 255px 12px 225px / 255px 12px 225px 12px; }
+    .pin {
+      position: absolute;
+      z-index: 2;
+      top: -0.5rem;
+      left: 50%;
+      width: 1rem;
+      height: 1rem;
+      margin-left: -0.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, var(--pin-shine), var(--pin) 45%, #a02828 100%);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(0,0,0,0.15);
+    }
+    .note--no-center-pin .pin { left: 18%; margin-left: 0; }
+    .note--no-center-pin--r .pin { left: auto; right: 12%; margin-left: 0; }
+    .tape {
+      position: absolute;
+      height: 0.7rem;
+      left: 12%;
+      right: 12%;
+      top: 0.15rem;
+      background: var(--tape);
+      opacity: 0.9;
+      border-radius: 1px;
+      transform: rotate(-0.3deg);
+      pointer-events: none;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+    }
+    h1 {
+      font-family: var(--font-doodle);
+      font-size: clamp(2.1rem, 5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin: 0 0 0.4em;
+      transform: rotate(-0.2deg);
+    }
+    h2, .c-block h2 {
+      font-family: var(--font-doodle);
+      font-size: clamp(1.5rem, 2.8vw, 2rem);
+      font-weight: 400;
+      margin: 0.6em 0 0.35em;
+    }
+    .lede { margin: 0.15em 0; color: var(--ink); font-size: 1.1em; }
+    .kicker {
+      display: block;
+      font-family: var(--font-doodle);
+      font-size: 0.95em;
+      color: var(--ink-soft);
+      margin: 0.75rem 0 0.35rem;
+      transform: rotate(0.5deg);
+    }
+    .stanzas p, .body-copy p, .c-block p { margin: 0.2em 0; color: var(--ink); font-size: 1.02em; }
+    .stanzas { margin-bottom: 0.5rem; }
+    .hl { font-weight: 600; }
+    .fine { font-size: 0.9em !important; color: #555 !important; }
+    .spacer { height: 0.4rem; }
+
+    /* —— Photo notes —— */
+    .shot {
+      position: relative;
+      padding: 0.65rem 0.65rem 1.75rem;
+      background: #fff;
+      border: 2px solid var(--line);
+      margin: 0 auto 2rem;
+      max-width: min(100%, 40rem);
+      box-shadow: 3px 5px 0 rgba(0,0,0,0.04), 8px 12px 30px -8px rgba(0,0,0,0.1);
+    }
+    .shot--lg { max-width: min(100%, 48rem); }
+    .shot--tilt-1 { transform: rotate(0.5deg); border-radius: 4px; }
+    .shot--tilt-2 { transform: rotate(-0.7deg); border-radius: 3px; }
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: min(68vh, 30rem);
+      object-fit: contain;
+      background: #fff;
+    }
+    .shot--dark img { background: #0a0a0a; }
+    .shot .tape { top: 0.2rem; }
+
+    /* —— Sticker grid —— */
+    .mosaic {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.1rem 1.25rem;
+      padding: 0.5rem 0 2rem;
+    }
+    .sticker {
+      position: relative;
+      flex: 0 0 auto;
+      width: min(44vw, 11.5rem);
+      padding: 0.45rem;
+      background: #fff;
+      border: 2px solid var(--line);
+      box-shadow: 2px 3px 0 rgba(0,0,0,0.04), 3px 8px 16px -4px rgba(0,0,0,0.1);
+    }
+    .sticker .pin { top: 0.15rem; left: 1.1rem; margin-left: 0; }
+    @media (min-width: 40rem) { .sticker { width: 10.5rem; } }
+    .sticker:nth-child(1)  { transform: rotate(-1.2deg); border-radius: 3px; }
+    .sticker:nth-child(2)  { transform: rotate(0.8deg); border-radius: 4px 2px; }
+    .sticker:nth-child(3)  { transform: rotate(1deg); }
+    .sticker:nth-child(4)  { transform: rotate(-0.6deg); }
+    .sticker:nth-child(5)  { transform: rotate(-0.9deg); }
+    .sticker:nth-child(6)  { transform: rotate(0.4deg); }
+    .sticker:nth-child(7)  { transform: rotate(1.1deg); }
+    .sticker:nth-child(8)  { transform: rotate(-0.5deg); }
+    @media (prefers-reduced-motion: reduce) {
+      .note, .shot, .sticker { transform: none !important; }
+    }
+    .sticker img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+    }
+    .sticker::after {
+      content: "";
+      position: absolute;
+      top: 0.1rem; left: 50%;
+      width: 38%;
+      height: 0.5rem;
+      margin-left: -19%;
+      background: var(--tape);
+      opacity: 0.85;
+      border-radius: 1px;
+      transform: rotate(-1.5deg);
+    }
+
+    .c-block { padding: 0; margin-top: 0.5rem; }
 
     footer {
-      text-align: center; color: var(--ink-faint); font-size: 0.78rem; padding: 2rem 1rem 2.5rem; border-top: 1px solid var(--line);
+      text-align: center;
+      font-family: var(--font-doodle);
+      color: #888;
+      font-size: 1.05rem;
+      padding: 1.5rem 1rem 2rem;
+      border-top: 2px dashed color-mix(in srgb, var(--line) 25%, transparent);
     }
   </style>
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="site">
+  <div class="board">
     <header class="bar">
-      <span class="mark">$FLOMO</span>
-      <span class="sub">flork fomo</span>
+      <span class="bar__title">$FLOMO</span>
+      <span class="bar__tag">~ bulletin ~</span>
     </header>
 
     <main>
-      <article class="flow reveal" data-reveal>
+      <article class="note note--tilt-1 reveal" data-reveal>
+        <span class="pin" aria-hidden="true"></span>
+        <span class="tape" aria-hidden="true"></span>
         <h1>Welcome to <span class="hl">$FLOMO</span></h1>
         <p class="lede">It’s not personal. It’s just business.</p>
         <p class="lede">The same line as: nothing personal — just an <span class="hl">$ETH</span> season.</p>
         <div class="spacer" aria-hidden="true"></div>
-        <span class="kicker">The vibe check</span>
+        <span class="kicker">The vibe check ~</span>
         <div class="stanzas">
           <p>You're awake at 4am sniping <span class="hl">$SOL</span> 20k mcaps on pump.fun</p>
           <p>A whatsapp sticker from 2013 is at 18M</p>
           <p>Nothing personal, just an <span class="hl">$ETH</span> season</p>
         </div>
-        <h2 class="h2">What is FLOMO</h2>
+        <h2>What is FLOMO</h2>
         <div class="body-copy">
           <p><span class="hl">FLOMO</span> is the feeling you get when a whatsapp sticker from 2013 is outperforming the entire solana memecoin market.</p>
           <p><span class="hl">FLOMO</span> is a movement.</p>
@@ -152,34 +259,40 @@
         </div>
       </article>
 
-      <div class="bleed bleed--ink reveal" data-reveal>
-        <img src="assets/hero-tux-business.png" alt="Flork in a tuxedo, ETH bucket hat, black background" width="800" height="500" />
+      <div class="shot shot--lg shot--tilt-1 shot--dark note--no-center-pin reveal" data-reveal>
+        <span class="pin" aria-hidden="true"></span>
+        <span class="tape" aria-hidden="true"></span>
+        <img src="assets/hero-tux-business.png" alt="Flork in a tuxedo, ETH bucket hat" width="800" height="500" />
       </div>
 
-      <div class="mosaic" aria-label="FLOMO visual set">
-        <figure class="reveal" data-reveal><img src="assets/hero-flork-eth.png" alt="Flork shrugging, Ethereum hat" width="400" height="400" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/flork-sniper-muzzle.png" alt="Flork with muzzle flash" width="500" height="500" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/flork-bear-dont-tread.png" alt="Flork and bear, Gadsden headband" width="700" height="500" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/wojak-champagne-serve.png" alt="Crying wojak pouring a drink for Flork" width="700" height="500" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/flork-window-fomo.png" alt="Flork at a window" width="500" height="500" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/flork-bear-market.png" alt="Flork and bear" width="700" height="500" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/flork-trading-ui.png" alt="Flork on trading interface" width="1000" height="600" loading="lazy" /></figure>
-        <figure class="reveal" data-reveal><img src="assets/merchant-memes-coat.png" alt="Flork as meme merchant" width="700" height="500" loading="lazy" /></figure>
+      <div class="mosaic" aria-label="Pinned stickers">
+        <figure class="sticker reveal" data-reveal><img src="assets/hero-flork-eth.png" alt="Flork shrugging, Ethereum hat" width="400" height="400" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/flork-sniper-muzzle.png" alt="Flork with muzzle flash" width="500" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/flork-bear-dont-tread.png" alt="Flork and bear, Gadsden headband" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/wojak-champagne-serve.png" alt="Crying wojak pouring a drink for Flork" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/flork-window-fomo.png" alt="Flork at a window" width="500" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/flork-bear-market.png" alt="Flork and bear" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/flork-trading-ui.png" alt="Flork on trading interface" width="1000" height="600" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
+        <figure class="sticker reveal" data-reveal><img src="assets/merchant-memes-coat.png" alt="Flork as meme merchant" width="700" height="500" loading="lazy" /><span class="pin" aria-hidden="true"></span></figure>
       </div>
 
-      <div class="c-block reveal" data-reveal>
-        <h2>Stop refreshing the wrong chain.</h2>
+      <div class="note note--tilt-2 c-block reveal" data-reveal>
+        <span class="pin" aria-hidden="true"></span>
+        <span class="tape" aria-hidden="true"></span>
+        <h2>Stop refreshing the wrong chain</h2>
         <p>Pack your memes, cross the bridge, and find your people on the other side. The bridge is open — <span class="hl">ETH</span> is waiting.</p>
         <p class="fine">$FLOMO — Flork FOMO on Ethereum. Not financial advice. DYOR.</p>
       </div>
 
-      <div class="bleed bleed--dusk reveal" data-reveal>
-        <div class="fig-wide">
-          <img src="assets/flork-sunset-bridge.png" alt="Flork on a boardwalk at sunset" width="1200" height="600" loading="lazy" />
-        </div>
+      <div class="shot shot--lg shot--tilt-2 note--no-center-pin--r reveal" data-reveal>
+        <span class="pin" aria-hidden="true"></span>
+        <span class="tape" aria-hidden="true"></span>
+        <img src="assets/flork-sunset-bridge.png" alt="Flork on a boardwalk at sunset" width="1200" height="600" loading="lazy" />
       </div>
 
-      <div class="fig-narrow fig-wide reveal" data-reveal>
+      <div class="shot shot--tilt-1 note--no-center-pin reveal" data-reveal>
+        <span class="pin" aria-hidden="true"></span>
+        <span class="tape" aria-hidden="true"></span>
         <img src="assets/ferrari-fomo-plate.png" alt="Ferrari rear with a FLOMO license plate" width="1200" height="700" loading="lazy" />
       </div>
     </main>
@@ -202,7 +315,7 @@
             if (e.isIntersecting) { on(e.target); io.unobserve(e.target); }
           });
         },
-        { rootMargin: "0px 0px -4% 0px", threshold: 0.05 }
+        { rootMargin: "0px 0px -2% 0px", threshold: 0.04 }
       );
       nodes.forEach(function (el) { io.observe(el); });
     })();
