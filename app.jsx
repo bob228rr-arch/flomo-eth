@@ -8,7 +8,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "crookedAmount": 2.2,
   "marqueeSpeed": 60,
   "showEditorialExtras": true,
-  "ca": "0x00000000000000000000000000000000FL0MO",
+  "ca": "HztbgJzJVgSfqPvithdSBMnib1w7CJ4QVg3r1YNkpump",
   "twitterUrl": "https://x.com/flomo_fomo",
   "dexUrl": "https://dexscreener.com"
 } /*EDITMODE-END*/;
