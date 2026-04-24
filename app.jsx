@@ -73,7 +73,21 @@ const IconCopy = () =>
    HEADER
    ============================================================ */
 function Masthead({ ca, twitterUrl, dexUrl }) {
+  const [navOpen, setNavOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  useEffect(function () {
+    if (!navOpen) return;
+    var onKey = function (e) { if (e.key === "Escape") setNavOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return function () { document.removeEventListener("keydown", onKey); };
+  }, [navOpen]);
+  useEffect(function () {
+    var onResize = function () {
+      if (window.innerWidth > 900) setNavOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return function () { window.removeEventListener("resize", onResize); };
+  }, []);
   const shortCa = useMemo(() => {
     if (!ca) return "0x000…000";
     if (ca.length <= 14) return ca;
@@ -95,21 +109,33 @@ function Masthead({ ca, twitterUrl, dexUrl }) {
     }
   };
 
+  const closeNav = () => setNavOpen(false);
   return (
     <header className="masthead">
       <div className="container">
         <div className="masthead-inner">
-          <div className="masthead-left">
-            <span className="masthead-brand">$flomo</span>
-            <span className="mono" style={{ color: "var(--muted)" }}>
+          <div className="masthead-row-1">
+            <div className="masthead-left">
+              <span className="masthead-brand">$flomo</span>
+              <span className="mono" style={{ color: "var(--muted)" }}>
 
 </span>
+            </div>
+            <button
+              type="button"
+              className={"nav-burger" + (navOpen ? " is-open" : "")}
+              aria-label={navOpen ? "Close menu" : "Open menu"}
+              aria-expanded={navOpen}
+              aria-controls="main-nav"
+              onClick={() => setNavOpen((o) => !o)}>
+              <span className="nav-burger-lines" aria-hidden="true" />
+            </button>
           </div>
-          <nav className="masthead-center">
-            <a href="#who" className="nav-link">Who</a>
-            <a href="#gallery" className="nav-link">Gallery</a>
-            <a href="#about" className="nav-link">Manifesto</a>
-            <a className="nav-link" href={twitterUrl} target="_blank" rel="noreferrer noopener">Community</a>
+          <nav className={"masthead-center" + (navOpen ? " is-open" : "")} id="main-nav">
+            <a href="#who" className="nav-link" onClick={closeNav}>Who</a>
+            <a href="#gallery" className="nav-link" onClick={closeNav}>Gallery</a>
+            <a href="#about" className="nav-link" onClick={closeNav}>Manifesto</a>
+            <a className="nav-link" href={twitterUrl} target="_blank" rel="noreferrer noopener" onClick={closeNav}>Community</a>
           </nav>
           <div className="masthead-right">
             <a className="pill twitter" href={twitterUrl} target="_blank" rel="noreferrer noopener">
