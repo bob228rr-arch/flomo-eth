@@ -74,7 +74,38 @@ const IconCopy = () =>
    ============================================================ */
 function Masthead({ ca, twitterUrl, dexUrl }) {
   const [navOpen, setNavOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const lastScrollY = useRef(0);
+  const navOpenRef = useRef(false);
   const [copied, setCopied] = useState(false);
+  navOpenRef.current = navOpen;
+  useEffect(function () {
+    if (navOpen) setHeaderHidden(false);
+  }, [navOpen]);
+  useEffect(function () {
+    lastScrollY.current = window.scrollY || 0;
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        if (navOpenRef.current) return;
+        var y = window.scrollY || document.documentElement.scrollTop;
+        var delta = y - lastScrollY.current;
+        lastScrollY.current = y;
+        if (y < 40) {
+          setHeaderHidden(false);
+        } else if (delta > 6) {
+          setHeaderHidden(true);
+        } else if (delta < -6) {
+          setHeaderHidden(false);
+        }
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return function () { window.removeEventListener("scroll", onScroll); };
+  }, []);
   useEffect(function () {
     if (!navOpen) return;
     var onKey = function (e) { if (e.key === "Escape") setNavOpen(false); };
@@ -111,7 +142,7 @@ function Masthead({ ca, twitterUrl, dexUrl }) {
 
   const closeNav = () => setNavOpen(false);
   return (
-    <header className="masthead">
+    <header className={"masthead" + (headerHidden ? " masthead--hide" : "")}>
       <div className="container">
         <div className="masthead-inner">
           <div className="masthead-row-1">
